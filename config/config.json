@@ -2,8 +2,8 @@
   "development": {
     "username": "root",
     "password": "P4ssw0rd",
-    "database": "blogger",
-    "host": "127.0.0.1",
+    "database": "bestdeck",
+    "host": "192.168.1.5",
     "port": 3306,
     "dialect": "mysql"
   },
