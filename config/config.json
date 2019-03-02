@@ -3,7 +3,7 @@
     "username": "root",
     "password": "P4ssw0rd",
     "database": "bestdeck",
-    "host": "192.168.1.5",
+    "host": "localhost",
     "port": 3306,
     "dialect": "mysql"
   },
