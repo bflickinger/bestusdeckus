@@ -2,27 +2,38 @@ $(document).ready(function () {
   // rightContainer holds all of our posts
   let rightContainer = $("#rightContainer");
   let leftContainer = $("#leftContainer");
-  let postCategorySelect = $("#category");
-  postCategorySelect.on("change", handleCategoryChange);
+  let cardFilterSelect = $("#filter");
+  cardFilterSelect.on("change", handleFilterChange);
   let cards;
+  let userCards;
+  let cardTemp;
 
   // This function grabs posts from the database and updates the view
-  function getPosts(category) {
+  function getCardsLeft(category) {
     let categoryString = category || "";
     if (categoryString) {
+      console.log('category changed')
       categoryString = "/category/" + categoryString;
     }
     $.get("/api/posts/left" + categoryString, function (data) {
-      console.log("Posts", data);
+      // console.log("Mtgcards", data);
       cards = data;
+      console.log(cards);
       initializeRowsLeft();
     });
   }
 
-  // Getting the initial list of posts
-  getPosts();
-  // InitializeRows handles appending all of our constructed post HTML inside
-  // leftContainer
+  function getCardsRight() {
+    $.get("/api/posts/right", function (data) {
+      // console.log("Usercards", data);
+      userCards = data;
+      initializeRowsRight();
+    });
+  }
+
+  getCardsLeft();
+  getCardsRight();
+  
   function initializeRowsLeft() {
     leftContainer.empty();
     let cardsToAdd = [];
@@ -30,6 +41,17 @@ $(document).ready(function () {
       cardsToAdd.push(createNewRow(cards[i]));
     }
     leftContainer.append(cardsToAdd);
+  }
+
+  function initializeRowsRight() {
+    rightContainer.empty();
+    let cardsTemp = [];
+    let cardsToAdd = userCards[0].deck_list.split(',');
+    // console.log('Rows Right ' + userCards[0].deck_list);
+    for (let i = 0; i < cardsToAdd.length; i++) {
+      cardsTemp.push(createNewRowRight(cardsToAdd[i]));
+    }
+    rightContainer.append(cardsTemp);
   }
 
   // This function constructs a card's HTML
@@ -55,10 +77,29 @@ $(document).ready(function () {
     return newCard;
   }
 
-  // This function handles reloading new posts when the category changes
-  function handleCategoryChange() {
+  function createNewRowRight(post) {
+    let newCard = $("<div>");
+    let newBody = $("<strong>");
+
+    newCard.attr({
+      "class":"dc_cname dc_ccc dc_ib"
+    });
+
+    $.get("/api/posts/" + post, function (data) {
+      // console.log("Mtgcards", data);
+      cardTemp = data.card_name;
+      newBody.text(cardTemp);
+    });
+
+    newCard.append(newBody);
+    newCard.data("post", post);
+    return newCard;
+  }
+
+  // This function handles reloading new posts when the filter changes
+  function handleFilterChange() {
     let newPostCategory = $(this).val();
-    getPosts(newPostCategory);
+    getCardsLeft(newPostCategory);
   }
 
 });

@@ -14,21 +14,21 @@ module.exports = function (app) {
 
   // GET route for getting all of the cards, limited to x on the left side.
   app.get("/api/posts/left/", function (req, res) {
-    db.Mtgcard.findAll({limit:20})
+    db.Mtgcard.findAll({limit:30})
       .then(function (dbPost) {
         res.json(dbPost);
       });
   });
 
   app.get("/api/posts/right/", function (req, res) {
-    db.Userdeck.findAll({limit:20})
+    db.Userdeck.findAll({limit:60})
       .then(function (dbPost) {
         res.json(dbPost);
       });
   });
 
   // Get route for returning posts of a specific category
-  app.get("/api/posts/category/:category", function (req, res) {
+  app.get("/api/posts/left/category/:category", function (req, res) {
     db.Mtgcard.findAll({
       where: {
         card_color_identity: req.params.category
