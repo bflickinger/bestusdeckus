@@ -1,11 +1,4 @@
-// *********************************************************************************
-// api-routes.js - this file offers a set of routes for displaying and saving data to the db
-// *********************************************************************************
-
-// Dependencies
-// =============================================================
-
-// Requiring our Todo model
+// Requiring our models
 var db = require("../models");
 
 // Routes
@@ -40,7 +33,7 @@ module.exports = function (app) {
       });
   });
 
-  // Get route for retrieving a single post
+  // Get route for retrieving a single card by ID from the mtg deck
   app.get("/api/posts/:id", function (req, res) {
     db.Mtgcard.findOne({
       where: {
@@ -51,4 +44,18 @@ module.exports = function (app) {
         res.json(dbPost);
       });
   });
+
+  // PUT route for updating deck list in user deck
+  app.post("/api/posts/", function(req, res) {
+
+    // db.Userdeck.update(
+    //   {
+    //     deck_list
+    //   })
+    //   .then(function(dbPost) {
+    //     res.json(dbPost);
+    //   });
+    console.log("Express post: " + req.body.card_name);
+  });
+
 };
