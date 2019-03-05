@@ -4,11 +4,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
-    deck_user: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    deck_list: {
+    username: {
       type: DataTypes.TEXT,
       allowNull: false
     },
@@ -16,5 +12,20 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.TEXT
     }
   });
+
+  Userdeck.associate = function (models) {
+    Userdeck.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+  };
+
+  Userdeck.associate = function (models) {
+    Userdeck.hasMany(models.Usercard, {
+      onDelete: "cascade"
+    });
+  };
+
   return Userdeck;
 };
